@@ -1,0 +1,9 @@
+*.zip
+lambda_proxy/package/
+infra/.terraform.lock.hcl
+**/*.zip
+*.tfstate
+*.tfstate.backup
+.terraform/
+__pycache__/
+.venv/

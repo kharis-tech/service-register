@@ -1,0 +1,77 @@
+graph TD
+    subgraph "Internet"
+        User[<i class="fa fa-user"></i> User]
+    end
+
+    subgraph "AWS Cloud"
+        subgraph "VPC (10.0.0.0/16)"
+            subgraph "Public Subnets"
+                APIGW[<i class="fa fa-cloud"></i> API Gateway HTTP API]
+            end
+
+            subgraph "Private Subnets"
+                LambdaProxy[<i class="fa fa-bolt"></i> Lambda Proxy]
+                FargateService[<i class="fa fa-ship"></i> Fargate Service <br> (FastAPI App)]
+                RDS[<i class="fa fa-database"></i> RDS PostgreSQL]
+            end
+
+            subgraph "VPC Endpoints"
+                EndpointSecretsManager[<i class="fa fa-key"></i> Secrets Manager Endpoint]
+                EndpointECR[<i class="fa fa-docker"></i> ECR Endpoints (API, DKR)]
+                EndpointS3[<i class="fa fa-archive"></i> S3 Gateway Endpoint]
+                EndpointLogs[<i class="fa fa-file-text"></i> CloudWatch Logs Endpoint]
+                EndpointCloudMap[<i class="fa fa-map-signs"></i> Service Discovery Endpoint]
+            end
+        end
+
+        subgraph "Other AWS Services"
+            ECR[<i class="fa fa-docker"></i> ECR Repository]
+            SecretsManager[<i class="fa fa-key"></i> Secrets Manager <br> (DB URL)]
+            CloudMap[<i class="fa fa-map-signs"></i> Cloud Map <br> (Service Discovery)]
+            CloudWatch[<i class="fa fa-watch"></i> CloudWatch Logs]
+        end
+    end
+
+    %% Connections
+    User --> APIGW
+
+    subgraph "Networking & Security"
+        %% API Gateway to Lambda
+        APIGW -- "HTTPS Request" --> LambdaProxy
+
+        %% Lambda to Cloud Map
+        LambdaProxy -- "1. Discover Instance (HTTPS)" --> EndpointCloudMap
+        EndpointCloudMap -- "PrivateLink" --> CloudMap
+
+        %% Lambda to Fargate
+        LambdaProxy -- "2. Forward Request (HTTP:8000)" --> FargateService
+
+        %% Fargate to ECR
+        FargateService -- "Pull Image (HTTPS)" --> EndpointECR
+        EndpointECR -- "PrivateLink" --> ECR
+        ECR -- "Uses" --> EndpointS3
+
+        %% Fargate to Secrets Manager
+        FargateService -- "Get DB Secret (HTTPS)" --> EndpointSecretsManager
+        EndpointSecretsManager -- "PrivateLink" --> SecretsManager
+
+        %% Fargate to CloudWatch
+        FargateService -- "Send Logs (HTTPS)" --> EndpointLogs
+        EndpointLogs -- "PrivateLink" --> CloudWatch
+
+        %% Fargate to RDS
+        FargateService -- "DB Connection (TCP:5432)" --> RDS
+    end
+
+    %% Style Definitions
+    classDef default fill:#232F3E,stroke:#FFFFFF,stroke-width:2px,color:#FFFFFF;
+    classDef subgraph fill:#34495E,stroke:#FF9900,stroke-width:2px,color:#FFFFFF;
+    classDef vpc fill:#1D2838,stroke:#FF9900,stroke-width:2px,color:#FFFFFF;
+    classDef endpoint fill:#4A6572,stroke:#2ECC71,stroke-width:1px,color:#FFFFFF;
+
+    class User,APIGW,LambdaProxy,FargateService,RDS,ECR,SecretsManager,CloudMap,CloudWatch default;
+    class EndpointSecretsManager,EndpointECR,EndpointS3,EndpointLogs,EndpointCloudMap endpoint;
+
+    style PublicSubnets fill:#4A6572,stroke:#2ECC71
+    style PrivateSubnets fill:#4A6572,stroke:#E74C3C
+    style VPCEndpoints fill:#4A6572,stroke:#3498DB
