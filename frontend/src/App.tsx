@@ -1,22 +1,22 @@
-import { Routes, Route, Link } from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom';
+import Layout from './components/Layout';
+import MembersPage from './pages/Members';
+import AttendancePage from './pages/Attendance';
+import EventAttendancePage from './pages/EventAttendance';
+import ReportsPage from './pages/Reports';
 
 function App() {
   return (
-    <div>
-      <nav className="p-4 bg-gray-100 border-b">
-        <Link to="/" className="mr-4">Home</Link>
-        <Link to="/members" className="mr-4">Members</Link>
-        <Link to="/reports">Reports</Link>
-      </nav>
-      <main className="p-4">
-        <Routes>
-          <Route path="/" element={<div>Home Page</div>} />
-          <Route path="/members" element={<div>Members Page</div>} />
-          <Route path="/reports" element={<div>Reports Page</div>} />
-        </Routes>
-      </main>
-    </div>
-  )
+    <Layout>
+      <Routes>
+        <Route path="/" element={<div>Dashboard Page</div>} />
+        <Route path="/members" element={<MembersPage />} />
+        <Route path="/attendance" element={<AttendancePage />} />
+        <Route path="/attendance/:eventId" element={<EventAttendancePage />} />
+        <Route path="/reports" element={<ReportsPage />} />
+      </Routes>
+    </Layout>
+  );
 }
 
-export default App
+export default App;

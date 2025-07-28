@@ -1,0 +1,5 @@
+id,user_id,event_id,status,timestamp
+a5d7a4a0-8b2c-4b6e-b8e2-7b1d4b6e8e4d,d3d7a4a0-8b2c-4b6e-b8e2-7b1d4b6e8e4d,a4d7a4a0-8b2c-4b6e-b8e2-7b1d4b6e8e4d,true,2023-07-23T10:05:00
+b5d7a4a0-8b2c-4b6e-b8e2-7b1d4b6e8e4d,f3d7a4a0-8b2c-4b6e-b8e2-7b1d4b6e8e4d,a4d7a4a0-8b2c-4b6e-b8e2-7b1d4b6e8e4d,true,2023-07-23T10:06:00
+c5d7a4a0-8b2c-4b6e-b8e2-7b1d4b6e8e4d,e3d7a4a0-8b2c-4b6e-b8e2-7b1d4b6e8e4d,b4d7a4a0-8b2c-4b6e-b8e2-7b1d4b6e8e4d,true,2023-07-26T19:02:00
+d5d7a4a0-8b2c-4b6e-b8e2-7b1d4b6e8e4d,d3d7a4a0-8b2c-4b6e-b8e2-7b1d4b6e8e4d,c4d7a4a0-8b2c-4b6e-b8e2-7b1d4b6e8e4d,false,2023-07-29T18:00:00
